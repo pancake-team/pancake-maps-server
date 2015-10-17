@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Use correct character set. -->
+  <meta charset="utf-8">
+  <!-- Tell IE to use the latest, best version (or Chrome Frame if pre-IE11). -->
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <!-- Make the application on mobile take up the full browser screen and disable user scaling. -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+  <title>Hello World!</title>
+  <script src="Cesium/Cesium.js"></script>
+  <style>
+      @import url(Cesium/Widgets/widgets.css);
+      html, body, #cesiumContainer {
+          width: 100%; height: 100%; margin: 0; padding: 0; overflow: hidden;
+      }
+  </style>
+</head>
+<body>
+  <div id="cesiumContainer"></div>
+  <script>
+    var mapProvider = new Cesium.WebMapTileServiceImageryProvider({
+      url: '/map',
+      layer: 'layer',
+      style: 'style',
+      tileMatrixSetID: '1',
+      format: 'image/png'
+    });
+    var overlayProvider = new Cesium.WebMapTileServiceImageryProvider({
+      url: '/overlay',
+      layer: 'layer',
+      style: 'style',
+      tileMatrixSetID: '1',
+      format: 'image/png'
+    });
+    var terrainProvider = new Cesium.CesiumTerrainProvider({
+      url: '/terrain'
+    })
+
+    var viewer = new Cesium.Viewer('cesiumContainer', {
+      imageryProviderViewModels : [
+        new Cesium.ProviderViewModel({
+          name: 'map only',
+          iconUrl: Cesium.buildModuleUrl('Widgets/Images/ImageryProviders/openStreetMap.png'),
+          creationFunction: function () { return mapProvider; }
+        }),
+        new Cesium.ProviderViewModel({
+          name: 'map with overlay',
+          iconUrl: Cesium.buildModuleUrl('Widgets/Images/ImageryProviders/openStreetMap.png'),
+          creationFunction: function () { return [mapProvider, overlayProvider]; }
+        })
+      ],
+      terrainProviderViewModels: [
+        new Cesium.ProviderViewModel({
+          name: 'terrain',
+          iconUrl: Cesium.buildModuleUrl('Widgets/Images/ImageryProviders/openStreetMap.png'),
+          creationFunction: function () { return terrainProvider; }
+        })
+      ]
+    });
+  </script>
+</body>
+</html>
